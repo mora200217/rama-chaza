@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+
+ servernode:
+  build: .
+  ports:
+   - "3000:3000"
+  links:
+   - monguitodb
+
+ monguitodb:
+  image: mongo:bionic
+  ports:
+   - "27017:27017"
+  environment:
+   - MONGO_INITDB_USERNAME=nicolas
+   - MONGO_INITDB_PASSWORD=secret
+  volumes:
+   - mongo-data:/data/db
+
+ postgresdb:
+  image: postgres
+  restart: always
+  environment:
+    POSTGRES_PASSWORD: secret
+
+ adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+ mongo-data:
+
+

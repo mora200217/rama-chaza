@@ -1,23 +1,23 @@
 const mongoose = require("mongoose")
 const express = require("express")
 
-const Datos=mongoose.model("Datos", new mongoose.Schema({
+const Dato=mongoose.model("Dato", new mongoose.Schema({
     tipo:String,
     estado:String,
   }))
   
   const app= express()
-  mongoose.connect('mongodb://nico:secret@localhost:27017/miapp?authSource=admin')
+  mongoose.connect('mongodb://nicolas:<secret>@monguitodb:27017/miapp?authSource=admin')
   
   app.get('/',async(_req,res)=> {
     console.log('listando...')
-    const Datos = await Datos.find();
+    const Datos = await Dato.find();
     return res.send(Datos)
   })
   
   app.get('/crear',async(_req,res)=> {
     console.log('creando...')
-    await Datos.create({
+    await Dato.create({
       tipo:"Producto",
       estado:"vendido"
     });
