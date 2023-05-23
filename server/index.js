@@ -1,24 +1,37 @@
-import express from 'express'
-import mongoose from 'mongoose'
+const express = require('express');
+const mongoose = require('mongoose');
 
-const Dato=mongoose.model("Dato", new mongoose.Schema({
-    tipo:String,
-    estado:String,
-  }))
-  
-  const app= express()
-  mongoose.connect('mongodb://nicolas:secret@monguitodb:27017/miapp?authSource=admin')
-  
-  app.get('/',async(_req,res)=> {
-    console.log('listando...')
-    const Datos = await Dato.find();
-    return res.send(Datos)
-  })
-  
-  app.get('/crear', async (_req, res) => {
-    console.log('creando...')
-    await Dato.create({ tipo: 'producto', estado: 'Comprado' })
-    return res.send('ok')
-  })
- 
-  app.listen(3000,()=>console.log('listening...'))
+const app = express();
+
+app.set('view engine', 'ejs');
+
+app.use(express.urlencoded({ extended: false }));
+
+// Connect to MongoDB
+mongoose
+  .connect(
+    'mongodb://monguitodb:27017/docker-node-mongo',
+    { useNewUrlParser: true }
+  )
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
+
+const Item = require('../models/Item');
+
+app.get('/', (req, res) => {
+  Item.find()
+    .then(items => res.render('index', { items }))
+    .catch(err => res.status(404).json({ msg: 'No items found' }));
+});
+
+app.post('/item/add', (req, res) => {
+  const newItem = new Item({
+    name: req.body.name
+  });
+
+  newItem.save().then(item => res.redirect('/'));
+});
+
+const port = 3000;
+
+app.listen(port, () => console.log('Server running...'));
