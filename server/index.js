@@ -1,27 +1,24 @@
-import mongoose from 'mongoose'
 import express from 'express'
+import mongoose from 'mongoose'
 
-const Datos=mongoose.model("Datos", new mongoose.Schema({
+const Dato=mongoose.model("Dato", new mongoose.Schema({
     tipo:String,
     estado:String,
   }))
   
   const app= express()
-  mongoose.connect('mongodb://nico:secret@192.168.1.19:27017/miapp?authSource=admin')
+  mongoose.connect('mongodb://nicolas:secret@monguitodb:27017/miapp?authSource=admin')
   
   app.get('/',async(_req,res)=> {
     console.log('listando...')
-    const Datos = await Datos.find();
+    const Datos = await Dato.find();
     return res.send(Datos)
   })
   
-  app.get('/crear',async(_req,res)=> {
+  app.get('/crear', async (_req, res) => {
     console.log('creando...')
-    await Datos.create({
-      tipo:"Producto",
-      estado:"vendido"
-    });
-    return res.send("ok")
+    await Dato.create({ tipo: 'producto', estado: 'Comprado' })
+    return res.send('ok')
   })
-  
+ 
   app.listen(3000,()=>console.log('listening...'))
