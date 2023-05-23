@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "GUI para la remachada de la Rama estudiantil de la Universidad Nacional de Colombia Sede Bogotá",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node server/index.js"
   },
